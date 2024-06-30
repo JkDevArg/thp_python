@@ -1,11 +1,15 @@
+# network.py
+
 import socket
 import subprocess
 from thp.log import add_log, export_log
 from thp.color_utils import yellow_text, red_text, cyan_text
+import time
 
-def analyze_host(host, verbose=False, output=None):
+def analyze_host(host, verbose=False, output=None, packets=1):
     log = []
     console_log = []
+    packets_per_second = packets * 1000
 
     try:
         if verbose:
@@ -27,6 +31,11 @@ def analyze_host(host, verbose=False, output=None):
                 add_log(console_log, f'Ping output:\n{response.stdout}')
             determine_os(ip_address, verbose, log, console_log)
             scan_ports(ip_address, verbose, log, console_log)
+
+            if verbose:
+                add_log(log, f'Sending {packets_per_second} packets per second to {ip_address}...')
+                add_log(console_log, f'Sending {packets_per_second} packets per second to {ip_address}...')
+            send_packets(ip_address, packets_per_second, log, console_log)
         else:
             add_log(log, f'{host} is down!')
             add_log(console_log, f'{yellow_text(host)} is {red_text("down")}!')
@@ -88,3 +97,14 @@ def scan_ports(ip, verbose, log, console_log):
     if verbose and open_ports:
         add_log(log, f'Open ports details: {open_ports}')
         add_log(console_log, f'Open ports details: {open_ports}')
+
+def send_packets(ip, packets_per_second, log, console_log):
+    try:
+        for _ in range(packets_per_second):
+            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+                sock.sendto(b'Ping', (ip, 1))
+        add_log(log, f'Sent {packets_per_second} packets to {ip}')
+        add_log(console_log, f'Sent {packets_per_second} packets to {ip}')
+    except Exception as e:
+        add_log(log, f'Error sending packets: {e}')
+        add_log(console_log, f'Error sending packets: {e}')

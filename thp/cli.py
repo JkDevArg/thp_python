@@ -18,7 +18,7 @@ def print_logo():
 
 def print_about():
     print(Fore.CYAN + 'THP CLI Tool # Created by Joaquin Centurion \nGithub: https://github.com/JkDevArg/thp_python' + Style.RESET_ALL)
-    print(Fore.MAGENTA + ' \n\nUsage: thp [-a] [-p PORT] [-t HOST] [-s]' + Style.RESET_ALL)
+    print(Fore.MAGENTA + ' \n\nUsage: thp [-a] [-p PORT] [-t HOST] [-s] [-k PACKETS]' + Style.RESET_ALL)
 
 def parse_args():
     parser = argparse.ArgumentParser(description='THP CLI tool for network analysis')
@@ -28,6 +28,7 @@ def parse_args():
     parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
     parser.add_argument('-o', '--output', type=str, help='Output file name')
     parser.add_argument('-s', '--services', action='store_true', help='Scan for services on the host')
+    parser.add_argument('-k', '--packets', type=int, choices=range(1, 6), help='Number of packets to send per second (1-5)')
 
     return parser.parse_args()
 
@@ -43,7 +44,7 @@ def main():
             print(Fore.YELLOW + f'Analyzing host: {args.host} with verbose mode enabled' + Style.RESET_ALL)
         else:
             print(Fore.YELLOW + f'Analyzing host: {args.host}' + Style.RESET_ALL)
-        network.analyze_host(args.host, args.verbose, args.output)
+        network.analyze_host(args.host, args.verbose, args.output, args.packets)
         if args.services:
             services.analyze_services(args.host, args.verbose, args.output, console_log)
     elif args.port:
