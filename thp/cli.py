@@ -1,3 +1,5 @@
+# cli.py
+
 import argparse
 from colorama import init, Fore, Style
 from thp import network
@@ -13,9 +15,14 @@ logo = """
    ╚═╝   ╚═╝  ╚═╝╚═╝
 """
 
-def main():
+def print_logo():
     print(Fore.GREEN + logo + Style.RESET_ALL)
 
+def print_about():
+    print(Fore.CYAN + 'THP CLI Tool # Created by Joaquin Centurion \nGithub: https://github.com/JkDevArg/thp_python' + Style.RESET_ALL)
+    print(Fore.MAGENTA + ' \n\nUsage: thp [-a] [-p PORT] [-t HOST]' + Style.RESET_ALL)
+
+def parse_args():
     parser = argparse.ArgumentParser(description='THP CLI tool for network analysis')
     parser.add_argument('-a', '--about', action='store_true', help='Show help information')
     parser.add_argument('-p', '--port', type=int, help='Port number')
@@ -23,11 +30,14 @@ def main():
     parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
     parser.add_argument('-o', '--output', type=str, help='Output file name')
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+def main():
+    print_logo()
+    args = parse_args()
 
     if args.about:
-        print(Fore.CYAN + 'THP CLI Tool # Created by Joaquin Centurion \nGithub: https://github.com/JkDevArg/thp_python'+ Style.RESET_ALL)
-        print(Fore.MAGENTA + ' \n\nUsage: thp [-a] [-p PORT] [-t HOST]' + Style.RESET_ALL)
+        print_about()
     elif args.host:
         if args.verbose:
             print(Fore.YELLOW + f'Analyzing host: {args.host} with verbose mode enabled' + Style.RESET_ALL)
@@ -37,7 +47,7 @@ def main():
     elif args.port:
         print(Fore.GREEN + f'Port specified: {args.port}' + Style.RESET_ALL)
     else:
-        parser.print_help()
+        print(Fore.RED + 'Error: No host or port specified. Use -h for help.' + Style.RESET_ALL)
 
 if __name__ == '__main__':
     main()
