@@ -29,3 +29,29 @@ options:
   -o OUTPUT, --output OUTPUT
                         Output file name
 ```
+
+## Example
+
+### simple scan
+
+```bash
+thp -t 127.0.0.1
+```
+
+### port scan
+
+```bash
+thp -p 80,22 -t 127.0.0.1
+```
+
+### debug mode
+
+```bash
+thp -p 80,22 -t 127.0.0.1 -v
+```
+
+### output file
+
+```bash
+thp -p 80,22 -t 127.0.0.1 -v -o output.txt
+```
