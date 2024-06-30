@@ -1,10 +1,12 @@
 import json
 import os
 import socket
+import pkg_resources
 from thp.log import add_log
 
 def load_services_json():
-    with open(os.path.join(os.path.dirname(__file__), 'json/services.json'), 'r') as file:
+    resource_path = pkg_resources.resource_filename('thp', 'json/services.json')
+    with open(resource_path, 'r') as file:
         return json.load(file)
 
 SERVICES_DATA = load_services_json()
@@ -46,6 +48,6 @@ def analyze_services(ip, verbose, output, console_log):
         add_log(console_log, f'No services found on {ip}')
 
     if output:
-        add_log(log, f'Exporting log to {output}')
+        add_log(log, f'Exporting log to {output}')  # Add a log message instead of calling export_log
 
     return services_info

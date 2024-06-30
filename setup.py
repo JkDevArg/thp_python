@@ -4,10 +4,14 @@ setup(
     name='thp',
     version='0.1',
     packages=find_packages(),
+    include_package_data=True,
     install_requires=[
         'colorama',
         'argparse'
     ],
+    package_data={
+        'thp': ['json/services.json'],
+    },
     entry_points={
         'console_scripts': [
             'thp=thp.cli:main',
